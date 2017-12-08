@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Cropper.js</title>
+  <link rel="stylesheet" href="css/cropper.min.css">
+  <link rel="stylesheet" href="css/index.css">
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="js/cropper.min.js"></script>
+  <script src="js/index.js"></script>
+</head>
+
+<body>
+  <div class="contaner">
+    <form>
+      <div class="crop">
+        <div class="crop-file">
+          <input type="file" id="inputImage" class="file-img">
+          <button class="btn-img">上传缩略图</button>
+        </div>
+        <div class="crop-view">
+
+        </div>
+        <input type="hidden" id="base64">
+      </div>
+
+    </form>
+    <!-- 弹出窗 -->
+    <div class="crop-modal" id="cropModal">
+      <div class="crop-container">
+        <h5 class="crop-modal-header">
+          <span class="crop-modal-close">x</span>裁剪</h5>
+        <div class="crop-modal-body">
+          <div class="crop-modal-img">
+            <img id="cropImage" alt="Picture">
+          </div>
+        </div>
+        <div class="crop-modal-footer">
+          <button type="button" class="crop-modal-close crop-modal-btn">裁剪</button>
+        </div>
+      </div>
+    </div>
+    <!-- 弹出窗end -->
+  </div>
+</body>
+
+</html>
