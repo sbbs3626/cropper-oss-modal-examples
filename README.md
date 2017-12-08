@@ -5,22 +5,32 @@
 > 开始
 
 ```
+
 new Cropper(image,{option});
 
 ```
 
 > 生成canvas
 
-`cropper.getCroppedCanvas() `
+```
+
+cropper.getCroppedCanvas() 
+
+```
 
 > canvas转base64 
 
-`cropper.getCroppedCanvas().toDataURL`
+```
+
+cropper.getCroppedCanvas().toDataURL
+
+```
 
 
 > 转blob使用ajax提交
 
 ```
+
 // Upload cropped image to server if the browser supports `HTMLCanvasElement.toBlob`
 cropper.getCroppedCanvas().toBlob(function (blob) {
   var formData = new FormData();
