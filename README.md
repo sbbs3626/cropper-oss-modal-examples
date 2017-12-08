@@ -2,7 +2,7 @@
 
 基于jquery+cropper.js裁剪插件，根据官方文档制作成适合自己项目使用，选择图片后通过弹出窗裁剪图片，目前只实现了功能，后续再完善细节。
 
-> 开始
+开始
 
 ```
 
@@ -10,7 +10,7 @@ new Cropper(image,{option});
 
 ```
 
-> 生成canvas
+生成canvas
 
 ```
 
@@ -18,7 +18,7 @@ cropper.getCroppedCanvas()
 
 ```
 
-> canvas转base64 
+canvas转base64 
 
 ```
 
@@ -27,7 +27,7 @@ cropper.getCroppedCanvas().toDataURL
 ```
 
 
-> 转blob使用ajax提交
+转blob使用ajax提交
 
 ```
 
