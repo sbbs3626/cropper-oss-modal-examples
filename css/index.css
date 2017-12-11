@@ -2,7 +2,7 @@
  * @Author: Alan.zheng 
  * @Date: 2017-12-08 16:34:19 
  * @Last Modified by: Alan.zheng
- * @Last Modified time: 2017-12-08 16:37:41
+ * @Last Modified time: 2017-12-11 16:49:53
  */
 
 .contaner {
@@ -19,22 +19,27 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 200px;
   height: 36px;
   opacity: 0;
 }
 
 .btn-img {
-  display: block;
-  width: 100%;
+  display: inline-block;
+  width: 200px;
   height: 36px;
-  color: #fff;
   border: 0;
   -webkit-border-radius: 0;
   border-radius: 0;
-  background: rgb(7, 134, 219);
+  border: 1px solid rgb(7, 134, 219);
+  color: rgb(7, 134, 219);
   font-size: 14px;
   line-height: 36px;
+  margin-right:10px; 
+}
+.uploadCrop {
+  background: rgb(7, 134, 219);
+  color: #fff;
 }
 
 .crop-view {
@@ -66,7 +71,7 @@
   border-radius: 5px;
   background: #fff;
 }
-
+.crop-modal-img { max-height: 440px; margin: 0 5px;}
 .crop-modal-header,
 .crop-modal-footer {
   margin: 0;
