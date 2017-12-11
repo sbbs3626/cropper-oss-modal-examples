@@ -2,18 +2,19 @@
  * @Author: Alan.zheng 
  * @Date: 2017-12-08 16:35:27 
  * @Last Modified by: Alan.zheng
- * @Last Modified time: 2017-12-11 16:53:37
+ * @Last Modified time: 2017-12-11 17:15:44
  */
+
+var file;
 $(function () {
   var cropper;
   var uploadedImageURL;
   var uploadedImageType = 'image/jpeg';
   var URL = window.URL || window.webkitURL;
-  // 上传图片
-  var $image = $('#cropImage'); 
+
+  var $image = $('#cropImage'); // 上传图片
   var $file = $("#inputImage"); // 上传file
   var $cropModalBox = $('#cropModal'); //弹出框
-  var file;  
   if (URL) {
     $file.on('change', function () {
       //选择图片
@@ -57,41 +58,42 @@ $(function () {
       $('.crop-view').html($result).next("#base64").val($base64);
       $result.toBlob(function (blob) {
         // 生成blob ,file对象
-        uploadCrop(blob); // 调用上传
+        uploadCropper.start(blob); // 调用上传
       }); 
     }
     cropper.destroy(); // 清除实例
     $cropModalBox.hide();
   });
+});
+
 
 /******************************以下是上传到阿里云************************************/
 
-  var d = new Date();
-  var str = d.getFullYear() + (d.getMonth() + 1) + d.getDate() + ''; //获取当日
-  var expire = 0; //时间戳
-  var dir = 'zp-customer/ur/' + str +'/'; // 上传的路径
-  var apiObj = {};
 
-  send_request = function () {
+var d = new Date();
+var str = d.getFullYear() + '' + (d.getMonth() + 1) + d.getDate(); //获取当日
+var expire = 0; //时间戳
+var dir = 'zp-customer/ur/' + str + '/'; // 上传的路径
+var apiObj = {};
+var uploadCropper = {
+  send_request: function () {
     //这是从后台获取认证策略等信息。
     var htmlobj = $.ajax({ url: "http://api.imrobotic.com/store/upload/image?dir=" + dir, async: false });
     return htmlobj.responseText;
-  };
-
-  function get_signature()//读取获得的参数
-  {
+  },
+  get_signature: function () {
     //可以判断当前expire是否超过了当前时间,如果超过了当前时间,就重新取一下.3s 做为缓冲
     now = timestamp = Date.parse(new Date()) / 1000;
     if (expire < now + 3) {
-      body = send_request();
+      body = this.send_request();
       apiObj = eval("(" + body + ")");
       expire = parseInt(apiObj['expire'])
       return true;
     }
     return false;
-  }
-  function uploadCrop(blob){
-    get_signature(); //请求认证信息
+  },
+  start: function (blob) {
+    this.get_signature(); //请求认证信息
     //组装发送数据
     var request = new FormData();
     request.append("OSSAccessKeyId", apiObj.accessid);//Bucket 拥有者的Access Key Id。
@@ -114,5 +116,5 @@ $(function () {
         console.log(callbackHost, request)
       }
     });
-  }  
-});
+  }
+}
