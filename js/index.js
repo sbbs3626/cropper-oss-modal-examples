@@ -2,7 +2,7 @@
  * @Author: Alan.zheng 
  * @Date: 2017-12-08 16:35:27 
  * @Last Modified by: Alan.zheng
- * @Last Modified time: 2017-12-11 16:52:29
+ * @Last Modified time: 2017-12-11 16:53:37
  */
 $(function () {
   var cropper;
@@ -71,7 +71,13 @@ $(function () {
   var expire = 0; //时间戳
   var dir = 'zp-customer/ur/' + str +'/'; // 上传的路径
   var apiObj = {};
-  
+
+  send_request = function () {
+    //这是从后台获取认证策略等信息。
+    var htmlobj = $.ajax({ url: "http://api.imrobotic.com/store/upload/image?dir=" + dir, async: false });
+    return htmlobj.responseText;
+  };
+
   function get_signature()//读取获得的参数
   {
     //可以判断当前expire是否超过了当前时间,如果超过了当前时间,就重新取一下.3s 做为缓冲
