@@ -2,7 +2,7 @@
  * @Author: Alan.zheng 
  * @Date: 2017-12-08 16:34:19 
  * @Last Modified by: Alan.zheng
- * @Last Modified time: 2017-12-11 16:49:53
+ * @Last Modified time: 2017-12-12 11:25:45
  */
 
 .contaner {
@@ -35,69 +35,14 @@
   color: rgb(7, 134, 219);
   font-size: 14px;
   line-height: 36px;
-  margin-right:10px; 
+  margin-right: 10px;
 }
-.uploadCrop {
-  background: rgb(7, 134, 219);
-  color: #fff;
+
+.btn-img.disabled {
+  border-color: #eee;
+  color: gray;
 }
 
 .crop-view {
   margin: 15px 0;
-}
-
-.crop-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: none;
-  width: 100%;
-  height: 100%;
-  content: ' ';
-  background: rgba(0, 0, 0, .5);
-}
-
-.crop-container {
-  position: fixed;
-  z-index: 999;
-  top: 50%;
-  left: 50%;
-  width: 800px;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  background: #fff;
-}
-.crop-modal-img { max-height: 440px; margin: 0 5px;}
-.crop-modal-header,
-.crop-modal-footer {
-  margin: 0;
-  padding: 10px 15px;
-  border-bottom: 1px solid #eee;
-}
-
-.crop-modal-footer {
-  text-align: right;
-  border-top: 1px solid #eee;
-  border-bottom: 0;
-}
-
-.crop-modal-header .crop-modal-close {
-  float: right;
-  cursor: pointer;
-}
-
-.crop-modal-btn {
-  padding: 8px 30px;
-  cursor: pointer;
-  color: #fff;
-  border: 0;
-  background: rgb(7, 134, 219);
-}
-
-.crop-modal-img img {
-  max-width: 100%;
 }

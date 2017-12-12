@@ -2,21 +2,17 @@
  * @Author: Alan.zheng 
  * @Date: 2017-12-08 16:35:27 
  * @Last Modified by: Alan.zheng
- * @Last Modified time: 2017-12-11 17:15:44
+ * @Last Modified time: 2017-12-12 11:25:45
  */
-
-var file;
-$(function () {
+$.fn.fileCropper = function () {
+  var file;
   var cropper;
   var uploadedImageURL;
   var uploadedImageType = 'image/jpeg';
   var URL = window.URL || window.webkitURL;
-
-  var $image = $('#cropImage'); // 上传图片
-  var $file = $("#inputImage"); // 上传file
-  var $cropModalBox = $('#cropModal'); //弹出框
+  var $inputFile = this; // 上传file
   if (URL) {
-    $file.on('change', function () {
+    $inputFile.on('change', function () {
       //选择图片
       var files = $(this)[0].files;
       file = files[0];
@@ -28,45 +24,50 @@ $(function () {
             URL.revokeObjectURL(uploadedImageURL);
           }
           uploadedImageURL = URL.createObjectURL(file);
-          $image.attr('src', uploadedImageURL); // 替换图片路径
-          cropper = new Cropper($image[0], {
-            // 调用cropper裁剪
-            viewMode: 2, // 全覆盖显示
-            aspectRatio: 3 / 2, // 设置图片比例
-            preview: '.img-preview'
+          layer.open({
+            type: 1,
+            title:'裁剪所需要的区域，操作滚轮进行缩放',
+            skin: 'layui-layer-rim', //加上边框
+            area: ['800px', '450px'], //宽高
+            btn: ['裁剪并上传'],
+            content: '<img id="cropImage" src="' + uploadedImageURL + '">',
+            success:function () {
+              cropper = new Cropper($('#cropImage')[0], {
+                // 调用cropper裁剪
+                viewMode: 2, // 全覆盖显示
+                aspectRatio: 3 / 2 // 设置图片比例
+              });
+              $inputFile.val(''); // 清空file 
+            },
+            yes: function (index) {
+              // 确定裁剪
+              var $result = cropper.getCroppedCanvas({
+                // 生成一个400宽的canvas预览图
+                width: 400
+              });
+              var $base64 = $result.toDataURL(uploadedImageType); // 生成base64
+              $('.crop-view').html($result).next("#base64").val($base64);
+              $result.toBlob(function (blob) {
+                // 生成blob ,file对象
+                uploadCropper.start(file, blob); // 调用上传
+              });
+              cropper.destroy(); // 清除实例
+              layer.close(index);
+            },
+            cancel: function () {
+              cropper.destroy(); // 清除实例
+            }
           });
-          $file.val(''); // 清空file
-          $cropModalBox.show();
         } else {
-          window.alert('请选择图片');
+          layer.msg('您选择的图片格式不支持');
         }
       }
     });
   } else {
-    $file.addClass('disabled').attr('disabled', true); // 禁用上传
-    window.alert('您的浏览器版本过低');
+    $inputFile.addClass('disabled').attr('disabled', true); // 禁用上传
+    layer.alert('您的浏览器版本过低');
   }
-
-  $('.crop-modal-close').on('click', function () {
-    // 关闭弹出窗
-    if ($(this).hasClass('crop-modal-btn')) {
-      // 确定裁剪
-      var $result = cropper.getCroppedCanvas({
-        width: 400
-      }); // 生成一个400宽的canvas预览图
-      var $base64 = $result.toDataURL(uploadedImageType); // 生成base64
-      $('.crop-view').html($result).next("#base64").val($base64);
-      $result.toBlob(function (blob) {
-        // 生成blob ,file对象
-        uploadCropper.start(blob); // 调用上传
-      }); 
-    }
-    cropper.destroy(); // 清除实例
-    $cropModalBox.hide();
-  });
-});
-
-
+}
 /******************************以下是上传到阿里云************************************/
 
 
@@ -78,7 +79,10 @@ var apiObj = {};
 var uploadCropper = {
   send_request: function () {
     //这是从后台获取认证策略等信息。
-    var htmlobj = $.ajax({ url: "http://api.imrobotic.com/store/upload/image?dir=" + dir, async: false });
+    var htmlobj = $.ajax({
+      url: "http://api.imrobotic.com/store/upload/image?dir=" + dir,
+      async: false
+    });
     return htmlobj.responseText;
   },
   get_signature: function () {
@@ -92,28 +96,31 @@ var uploadCropper = {
     }
     return false;
   },
-  start: function (blob) {
+  start: function (file, blob) {
     this.get_signature(); //请求认证信息
     //组装发送数据
     var request = new FormData();
-    request.append("OSSAccessKeyId", apiObj.accessid);//Bucket 拥有者的Access Key Id。
-    request.append("policy", apiObj.policy);//policy规定了请求的表单域的合法性
-    request.append("Signature", apiObj.signature);//根据Access Key Secret和policy计算的签名信息，OSS验证该签名信息从而验证该Post请求的合法性
+    request.append("OSSAccessKeyId", apiObj.accessid); //Bucket 拥有者的Access Key Id。
+    request.append("policy", apiObj.policy); //policy规定了请求的表单域的合法性
+    request.append("Signature", apiObj.signature); //根据Access Key Secret和policy计算的签名信息，OSS验证该签名信息从而验证该Post请求的合法性
     //---以上都是阿里的认证策略 
-    request.append("key", apiObj.dir + file.name);//文件名字，可设置路径
-    request.append("success_action_status", '200');// 让服务端返回200,不然，默认会返回204
+    request.append("key", apiObj.dir + file.name); //文件名字，可设置路径
+    request.append("success_action_status", '200'); // 让服务端返回200,不然，默认会返回204
     request.append('file', blob); //需要上传的文件 file
     $.ajax({
-      url: apiObj.host,  //上传阿里地址
+      url: apiObj.host, //上传阿里地址
       data: request,
-      processData: false,//默认true，设置为 false，不需要进行序列化处理
-      cache: false,//设置为false将不会从浏览器缓存中加载请求信息
-      async: false,//发送同步请求
-      contentType: false,//避免服务器不能正常解析文件
-      dataType: 'JSON',//不涉及跨域  写json即可
+      processData: false, //默认true，设置为 false，不需要进行序列化处理
+      cache: false, //设置为false将不会从浏览器缓存中加载请求信息
+      async: false, //发送同步请求
+      contentType: false, //避免服务器不能正常解析文件
+      // dataType: 'JSON',//不涉及跨域  写json即可
       type: 'POST',
-      success: function (callbackHost, request) {
-        console.log(callbackHost, request)
+      success: function (request) {
+        layer.msg('上传成功');
+      },
+      error: function () {
+        layer.msg('上传失败');
       }
     });
   }
