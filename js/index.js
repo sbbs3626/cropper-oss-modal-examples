@@ -2,10 +2,10 @@
  * @Author: Alan.zheng 
  * @Date: 2017-12-08 16:35:27 
  * @Last Modified by: Alan.zheng
- * @Last Modified time: 2017-12-12 16:15:56
+ * @Last Modified time: 2017-12-14 09:44:13
  */
 ;(function ($, window, document, undefined) {
-  $.fn.fileCropper = function (options) {
+  $.fn.fileCropper = function (options, callback) {
     var defaults = {
       'dir': 'demo/', // 上传图片路径
       'isView': true, // 是否生成预览图
@@ -131,7 +131,7 @@
           type: 'POST',
           success: function (request) {
             layer.msg('上传成功');
-            console.log(apiObj.dir + expire + file.name);
+            callback(apiObj.dir + expire + file.name);
           },
           error: function () {
             layer.msg('上传失败');
@@ -148,5 +148,7 @@ $(function () {
     'dir': 'demo/demo/', // 上传图片路径
     'isView': true, // 是否生成预览图
     'isBase64': true // 是否生成base64格式
+  },function (data) {
+    alert(params);
   });
 });
