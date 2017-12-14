@@ -2,7 +2,7 @@
  * @Author: Alan.zheng 
  * @Date: 2017-12-08 16:35:27 
  * @Last Modified by: Alan.zheng
- * @Last Modified time: 2017-12-14 09:44:13
+ * @Last Modified time: 2017-12-14 09:45:10
  */
 ;(function ($, window, document, undefined) {
   $.fn.fileCropper = function (options, callback) {
@@ -149,6 +149,6 @@ $(function () {
     'isView': true, // 是否生成预览图
     'isBase64': true // 是否生成base64格式
   },function (data) {
-    alert(params);
+    alert(data);
   });
 });
