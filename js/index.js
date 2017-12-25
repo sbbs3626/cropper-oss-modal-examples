@@ -2,7 +2,7 @@
  * @Author: Alan.zheng 
  * @Date: 2017-12-08 16:35:27 
  * @Last Modified by: Alan.zheng
- * @Last Modified time: 2017-12-25 16:18:00
+ * @Last Modified time: 2017-12-25 16:38:38
  */
 ;(function ($, window, document, undefined) {
   $.fn.fileCropper = function (options, callback) {
@@ -96,7 +96,7 @@
       send_request: function () {
         //这是从后台获取认证策略等信息。
         var htmlobj = $.ajax({
-          url: "http://api.imrobotic.com/store/upload/image?dir=" + settings.dir + str + '/',
+          url: "/store/upload/image?dir=" + settings.dir + str + '/',
           async: false
         });
         return htmlobj.responseText;
@@ -114,16 +114,16 @@
       },
       start: function (file, blob) {
         this.get_signature(); //请求认证信息
+        var g_object_name = apiObj.dir + this.random_string(10) + this.get_suffix(file.name); // 拼接 路径 + 随机名 + 后缀名
         //组装发送数据
         var request = new FormData();
         request.append("OSSAccessKeyId", apiObj.accessid); //Bucket 拥有者的Access Key Id。
         request.append("policy", apiObj.policy); //policy规定了请求的表单域的合法性
         request.append("Signature", apiObj.signature); //根据Access Key Secret和policy计算的签名信息，OSS验证该签名信息从而验证该Post请求的合法性
         //---以上都是阿里的认证策略
-        request.append("key", apiObj.dir + expire + file.name); //文件名字，可设置路径
+        request.append("key", g_object_name); //文件名字，可设置路径
         request.append("success_action_status", '200'); // 让服务端返回200,不然，默认会返回204
         request.append('file', blob); //需要上传的文件 file
-        var g_object_name = apiObj.dir + this.random_string(10) + this.get_suffix(file.name); // 拼接 路径 + 随机名 + 后缀名 
         $.ajax({
           url: apiObj.host, //上传阿里地址
           data: request,
@@ -143,7 +143,7 @@
       },
       random_string: function (len) {
         // 随机名字
-        len = len || 32;
+        var len = len || 32;
         var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
         var maxPos = chars.length;
         var pwd = '';
@@ -155,7 +155,7 @@
       get_suffix: function (filename) {
         // 查找后缀名
         pos = filename.lastIndexOf('.')
-        suffix = ''
+        var suffix = ''
         if (pos != -1) {
           suffix = filename.substring(pos)
         }
