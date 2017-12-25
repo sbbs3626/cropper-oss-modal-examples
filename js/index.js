@@ -2,14 +2,16 @@
  * @Author: Alan.zheng 
  * @Date: 2017-12-08 16:35:27 
  * @Last Modified by: Alan.zheng
- * @Last Modified time: 2017-12-14 09:45:10
+ * @Last Modified time: 2017-12-25 16:18:00
  */
 ;(function ($, window, document, undefined) {
   $.fn.fileCropper = function (options, callback) {
     var defaults = {
       'dir': 'demo/', // 上传图片路径
       'isView': true, // 是否生成预览图
-      'isBase64': true // 是否生成base64格式
+      'isBase64': false, // 是否生成base64格式
+      'aspectRatio': 3 / 2, // 设置图片比例
+      'maxWidth': 400, // 缩略图大小
     };
     var settings = $.extend({}, defaults, options);
     var file;
@@ -42,7 +44,7 @@
                 cropper = new Cropper($('#cropImage')[0], {
                   // 调用cropper裁剪
                   viewMode: 2, // 全覆盖显示
-                  aspectRatio: 3 / 2 // 设置图片比例
+                  aspectRatio: settings.aspectRatio // 设置图片比例
                 });
                 $inputFile.val(''); // 清空file 
               },
@@ -50,7 +52,7 @@
                 // 确定裁剪
                 var $result = cropper.getCroppedCanvas({
                   // 生成一个400宽的canvas预览图
-                  width: 400
+                  width: settings.maxWidth
                 });
                 var $base64 = $result.toDataURL(uploadedImageType); // 生成base64
                 if (settings.isView) {
@@ -121,6 +123,7 @@
         request.append("key", apiObj.dir + expire + file.name); //文件名字，可设置路径
         request.append("success_action_status", '200'); // 让服务端返回200,不然，默认会返回204
         request.append('file', blob); //需要上传的文件 file
+        var g_object_name = apiObj.dir + this.random_string(10) + this.get_suffix(file.name); // 拼接 路径 + 随机名 + 后缀名 
         $.ajax({
           url: apiObj.host, //上传阿里地址
           data: request,
@@ -131,24 +134,33 @@
           type: 'POST',
           success: function (request) {
             layer.msg('上传成功');
-            callback(apiObj.dir + expire + file.name);
+            callback(g_object_name);
           },
           error: function () {
             layer.msg('上传失败');
           }
         });
+      },
+      random_string: function (len) {
+        // 随机名字
+        len = len || 32;
+        var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+        var maxPos = chars.length;
+        var pwd = '';
+        for (i = 0; i < len; i++) {
+          pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        return pwd;
+      },
+      get_suffix: function (filename) {
+        // 查找后缀名
+        pos = filename.lastIndexOf('.')
+        suffix = ''
+        if (pos != -1) {
+          suffix = filename.substring(pos)
+        }
+        return suffix;
       }
     };
   };
 })(jQuery, window, document);
-
-
-$(function () {
-  $('#inputImage').fileCropper({
-    'dir': 'demo/demo/', // 上传图片路径
-    'isView': true, // 是否生成预览图
-    'isBase64': true // 是否生成base64格式
-  },function (data) {
-    alert(data);
-  });
-});

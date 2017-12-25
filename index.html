@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Cropper.js</title>
   <link rel="stylesheet" href="css/cropper.min.css">
-  <link rel="stylesheet" href="css/index.css">
   <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>
   <script src="js/cropper.min.js"></script>
@@ -22,8 +21,20 @@
         <button class="btn-img">选取图片</button>
       </div>
     </form>
-
   </div>
 </body>
+<script>
+  $(function () {
+        $('#inputImage').fileCropper({
+              'dir': 'demo/', // 上传图片路径 
+              'isView': true, // 是否生成预览图 
+              'isBase64': false, // 是否生成base64格式
+              'aspectRatio': 3 / 2, // 设置图片比例
+              'maxWidth': 400 // 缩略图大小
+          },function (data) { 
+              alert(data);
+          }); 
+        });
+</script>
 
 </html>
