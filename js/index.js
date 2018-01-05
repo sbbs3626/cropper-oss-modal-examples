@@ -2,7 +2,7 @@
  * @Author: Alan.zheng 
  * @Date: 2017-12-08 16:35:27 
  * @Last Modified by: Alan.zheng
- * @Last Modified time: 2017-12-25 16:38:38
+ * @Last Modified time: 2018-01-05 18:35:18
  */
 ;(function ($, window, document, undefined) {
   $.fn.fileCropper = function (options, callback) {
@@ -89,7 +89,11 @@
     /******************************以下是上传到阿里云************************************/
 
     var d = new Date();
-    var str = d.getFullYear() + '' + (d.getMonth() + 1) + d.getDate(); //获取当日
+    var m = d.getMonth() + 1;
+    var r = d.getDate();
+    var f_m = m < 10 ? '0' + m : m;
+    var f_r = r < 10 ? '0' + r : r;
+    var str = '' + d.getFullYear() + f_m + f_r; //获取年月日
     var expire = 0; //时间戳
     var apiObj = {};
     var uploadCropper = {
@@ -143,7 +147,7 @@
       },
       random_string: function (len) {
         // 随机名字
-        var len = len || 32;
+        len = len || 32;
         var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
         var maxPos = chars.length;
         var pwd = '';
@@ -154,10 +158,10 @@
       },
       get_suffix: function (filename) {
         // 查找后缀名
-        pos = filename.lastIndexOf('.')
-        var suffix = ''
+        var pos = filename.lastIndexOf('.');
+        var suffix = '';
         if (pos != -1) {
-          suffix = filename.substring(pos)
+          suffix = filename.substring(pos);
         }
         return suffix;
       }
