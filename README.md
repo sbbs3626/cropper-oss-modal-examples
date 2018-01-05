@@ -1,6 +1,6 @@
 # cropper-modal-examples
 
-基于jquery+cropper.js裁剪插件，cropper裁剪后上传至阿里云OSS，根据官方文档制作成适合自己项目使用，选择图片后通过弹出窗裁剪图片，目前只实现了功能，后续再完善细节。
+基于jquery+cropper.js裁剪插件，cropper裁剪后上传至阿里云OSS，根据官方文档制作成适合自己项目使用，选择图片后通过弹出窗裁剪图片，目前只实现了功能，后续再完善细节，因为项目本身使用了layer.js,所以用layer做了弹出框部分，可根据需要修改。
 
 开始
 
